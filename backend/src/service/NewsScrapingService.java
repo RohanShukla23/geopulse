@@ -1,6 +1,6 @@
-package com.geoinsight.service;
+package com.geopulse.service;
 
-import com.geoinsight.model.NewsArticle;
+import com.geopulse.model.NewsArticle;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

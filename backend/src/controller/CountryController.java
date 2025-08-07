@@ -1,11 +1,11 @@
-package com.geoinsight.controller;
+package com.geopulse.controller;
 
-import com.geoinsight.model.CountryInfo;
-import com.geoinsight.model.NewsArticle;
-import com.geoinsight.model.WeatherData;
-import com.geoinsight.service.CountryDataService;
-import com.geoinsight.service.NewsScrapingService;
-import com.geoinsight.service.WeatherService;
+import com.geopulse.model.CountryInfo;
+import com.geopulse.model.NewsArticle;
+import com.geopulse.model.WeatherData;
+import com.geopulse.service.CountryDataService;
+import com.geopulse.service.NewsScrapingService;
+import com.geopulse.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

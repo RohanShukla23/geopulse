@@ -1,4 +1,4 @@
-package com.geoinsight.model;
+package com.geopulse.model;
 
 public class WeatherData {
     

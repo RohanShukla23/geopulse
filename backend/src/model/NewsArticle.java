@@ -1,4 +1,4 @@
-package com.geoinsight.model;
+package com.geopulse.model;
 
 import java.time.LocalDateTime;
 

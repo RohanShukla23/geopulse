@@ -1,8 +1,8 @@
-package com.geoinsight.service;
+package com.geopulse.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.geoinsight.model.CountryInfo;
+import com.geopulse.model.CountryInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

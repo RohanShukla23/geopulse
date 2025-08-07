@@ -1,4 +1,4 @@
-package com.geoinsight.controller;
+package com.geopulse.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

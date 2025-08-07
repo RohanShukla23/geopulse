@@ -62,9 +62,9 @@ h2/
 coverage/
 *.lcov
 
-# Package manager lock files (optional - include if you want deterministic builds)
-# package-lock.json
-# yarn.lock
+# Package manager lock files - COMMIT THESE for deterministic builds
+# package-lock.json and yarn.lock should be committed
+# Only ignore if you specifically need flexible dependency resolution
 
 # Temporary files
 tmp/

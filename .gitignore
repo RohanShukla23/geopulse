@@ -1,0 +1,81 @@
+# Build outputs
+backend/target/
+frontend/build/
+frontend/dist/
+
+# Dependencies
+backend/node_modules/
+frontend/node_modules/
+*/node_modules/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+backend/logs/
+
+# Runtime data
+backend/data/
+*.pid
+*.seed
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# API keys and credentials
+api-keys.properties
+credentials.json
+secrets.yml
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+h2/
+
+# Cache directories
+.cache/
+.npm/
+.eslintcache
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Package manager lock files (optional - include if you want deterministic builds)
+# package-lock.json
+# yarn.lock
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Spring Boot specific
+backend/HELP.md
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# React specific
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*

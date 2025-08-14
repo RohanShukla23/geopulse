@@ -1,6 +1,7 @@
 package com.geopulse.controller;
 
 import com.geopulse.model.CountryInfo;
+import com.geopulse.model.CountryNotFoundException;
 import com.geopulse.model.NewsArticle;
 import com.geopulse.model.WeatherData;
 import com.geopulse.service.CountryDataService;
@@ -39,8 +40,28 @@ public class CountryController {
     @Transactional
     public ResponseEntity<CountryInfo> getCountryInfo(@PathVariable String countryName) {
         try {
+            // Validate input
+            if (countryName == null || countryName.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(
+                    createErrorCountryInfo("", "Country name cannot be empty"));
+            }
+            
+            // Clean and validate country name
+            String cleanCountryName = countryName.trim();
+            if (cleanCountryName.length() < 2) {
+                return ResponseEntity.badRequest().body(
+                    createErrorCountryInfo(cleanCountryName, "Country name must be at least 2 characters long"));
+            }
+            
+            // Check for obviously invalid input (numbers, special characters)
+            if (cleanCountryName.matches(".*[0-9].*") || 
+                cleanCountryName.matches(".*[!@#$%^&*()_+={}\\[\\]:;\"'<>,.?/|\\\\].*")) {
+                return ResponseEntity.badRequest().body(
+                    createErrorCountryInfo(cleanCountryName, "Invalid country name format"));
+            }
+            
             // Check cache first
-            CountryInfo cachedInfo = getCachedCountryInfo(countryName);
+            CountryInfo cachedInfo = getCachedCountryInfo(cleanCountryName);
             
             if (cachedInfo != null && cachedInfo.isCacheValid()) {
                 // Add live data (weather and news)
@@ -49,17 +70,21 @@ public class CountryController {
             }
             
             // Fetch fresh data
-            CountryInfo countryInfo = fetchCompleteCountryData(countryName);
+            CountryInfo countryInfo = fetchCompleteCountryData(cleanCountryName);
             
             // Cache the basic country info (not weather/news as they're real-time)
             cacheCountryInfo(countryInfo);
             
             return ResponseEntity.ok(countryInfo);
             
+        } catch (CountryNotFoundException e) {
+            System.err.println("Country not found: " + e.getMessage());
+            return ResponseEntity.status(404).body(
+                createErrorCountryInfo(countryName, e.getMessage()));
         } catch (Exception e) {
             System.err.println("Error processing request for " + countryName + ": " + e.getMessage());
-            return ResponseEntity.internalServerError()
-                .body(createErrorCountryInfo(countryName, e.getMessage()));
+            return ResponseEntity.internalServerError().body(
+                createErrorCountryInfo(countryName, "Service temporarily unavailable. Please try again."));
         }
     }
     
@@ -190,9 +215,15 @@ public class CountryController {
     
     private CountryInfo createErrorCountryInfo(String countryName, String errorMessage) {
         CountryInfo errorInfo = new CountryInfo(countryName);
-        errorInfo.setCapital("Data unavailable");
+        errorInfo.setCapital("N/A");
         errorInfo.setPopulation(0L);
-        errorInfo.setRegion("Error: " + errorMessage);
+        errorInfo.setRegion(errorMessage);
+        errorInfo.setSubregion("Please try a different search");
+        errorInfo.setArea(0.0);
+        errorInfo.setCurrency("N/A");
+        errorInfo.setLanguage("N/A");
+        errorInfo.setGdpPerCapita(0.0);
+        errorInfo.setGeopoliticalRiskIndex(0.0);
         return errorInfo;
     }
 }

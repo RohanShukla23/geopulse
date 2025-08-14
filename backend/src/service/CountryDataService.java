@@ -3,6 +3,7 @@ package com.geopulse.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.geopulse.model.CountryInfo;
+import com.geopulse.model.CountryNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -45,20 +46,36 @@ public class CountryDataService {
             
             if (response.statusCode() == 200) {
                 return parseCountryData(response.body(), countryName);
+            } else if (response.statusCode() == 404) {
+                // Country not found
+                throw new CountryNotFoundException("Country '" + countryName + "' not found. Please check the spelling and try again.");
             } else {
-                return createFallbackCountryData(countryName);
+                throw new RuntimeException("Failed to fetch country data: HTTP " + response.statusCode());
             }
             
+        } catch (CountryNotFoundException e) {
+            throw e; // Re-throw country not found exceptions
         } catch (Exception e) {
             System.err.println("Error fetching country data for " + countryName + ": " + e.getMessage());
-            return createFallbackCountryData(countryName);
+            throw new RuntimeException("Unable to fetch data for '" + countryName + "'. Please try again.", e);
         }
     }
     
     private CountryInfo parseCountryData(String jsonResponse, String countryName) {
         try {
             JsonNode root = objectMapper.readTree(jsonResponse);
+            
+            // Check if response is empty or indicates no results
+            if (root.isArray() && root.size() == 0) {
+                throw new CountryNotFoundException("No data found for country '" + countryName + "'");
+            }
+            
             JsonNode country = root.isArray() ? root.get(0) : root;
+            
+            // Validate that we have essential country data
+            if (!country.has("name") && !country.has("capital") && !country.has("population")) {
+                throw new CountryNotFoundException("Invalid country data received for '" + countryName + "'");
+            }
             
             CountryInfo info = new CountryInfo(countryName);
             
@@ -109,9 +126,11 @@ public class CountryDataService {
             
             return info;
             
+        } catch (CountryNotFoundException e) {
+            throw e; // Re-throw our custom exception
         } catch (Exception e) {
             System.err.println("Error parsing country data: " + e.getMessage());
-            return createFallbackCountryData(countryName);
+            throw new CountryNotFoundException("Unable to process data for '" + countryName + "'. Please verify the country name.");
         }
     }
     

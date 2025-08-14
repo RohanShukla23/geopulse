@@ -397,7 +397,8 @@ public class CountryDataService {
         countryGdpMultiplier.put("South Sudan", 0.01);
         
         double multiplier = countryGdpMultiplier.getOrDefault(countryName, 0.5);
-        return Math.round(baseGdp * multiplier);
+        // Convert Math.round result (long) to Double
+        return (double) Math.round(baseGdp * multiplier);
     }
     
     private Double calculateGeopoliticalRisk(String countryName, String region) {

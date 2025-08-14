@@ -26,6 +26,13 @@ apiClient.interceptors.request.use(
 // Response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => {
+    // Check if the response contains error data (HTTP 200 but with error info)
+    if (response.data && response.data.region && response.data.region.includes('not found')) {
+      throw new Error(response.data.region);
+    }
+    if (response.data && response.data.region && response.data.region.includes('Invalid country')) {
+      throw new Error(response.data.region);
+    }
     return response;
   },
   (error) => {
@@ -38,11 +45,20 @@ apiClient.interceptors.response.use(
     if (error.response) {
       // Server responded with error status
       const status = error.response.status;
+      const data = error.response.data;
+      
+      // Check for error in response data
+      if (data && data.region) {
+        throw new Error(data.region);
+      }
+      
       const message = error.response.data?.message || error.response.statusText;
       
       switch (status) {
+        case 400:
+          throw new Error(message || 'Invalid request - please check your input');
         case 404:
-          throw new Error('Country not found - please check the spelling');
+          throw new Error('Country not found - please check the spelling and try again');
         case 500:
           throw new Error('Server error - please try again later');
         case 503:

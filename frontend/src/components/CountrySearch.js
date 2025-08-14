@@ -37,8 +37,26 @@ const CountrySearch = ({ onSearch, disabled = false }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (searchTerm.trim() && !disabled) {
-      onSearch(searchTerm.trim());
+    const trimmedTerm = searchTerm.trim();
+    
+    // Input validation
+    if (!trimmedTerm) {
+      return; // Don't submit empty searches
+    }
+    
+    if (trimmedTerm.length < 2) {
+      alert('Please enter at least 2 characters');
+      return;
+    }
+    
+    // Check for invalid characters
+    if (/[0-9!@#$%^&*()_+={}[\]:;"'<>,.?/|\\]/.test(trimmedTerm)) {
+      alert('Please enter a valid country name (letters only)');
+      return;
+    }
+    
+    if (!disabled) {
+      onSearch(trimmedTerm);
       setShowSuggestions(false);
       inputRef.current?.blur();
     }

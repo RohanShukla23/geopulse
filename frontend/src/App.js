@@ -80,14 +80,81 @@ function App() {
           <div style={{
             backgroundColor: '#ff6b6b',
             color: 'white',
-            padding: '20px',
-            borderRadius: '12px',
+            padding: '25px',
+            borderRadius: '16px',
             textAlign: 'center',
             margin: '20px 0',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+            boxShadow: '0 8px 32px rgba(255, 107, 107, 0.3)',
+            border: '1px solid rgba(255, 255, 255, 0.2)'
           }}>
-            <h3 style={{ margin: '0 0 10px 0' }}>⚠️ Error</h3>
-            <p style={{ margin: '0' }}>{error}</p>
+            <h3 style={{ 
+              margin: '0 0 15px 0', 
+              fontSize: '1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px'
+            }}>
+              🚫 Oops! Country Not Found
+            </h3>
+            <p style={{ 
+              margin: '0 0 20px 0', 
+              fontSize: '1.1rem',
+              lineHeight: '1.5'
+            }}>
+              {error}
+            </p>
+            <div style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              padding: '15px',
+              borderRadius: '12px',
+              marginBottom: '20px'
+            }}>
+              <p style={{ 
+                margin: '0 0 10px 0', 
+                fontSize: '0.95rem',
+                fontWeight: '500'
+              }}>
+                💡 Try these suggestions:
+              </p>
+              <ul style={{
+                listStyle: 'none',
+                padding: '0',
+                margin: '0',
+                fontSize: '0.9rem',
+                lineHeight: '1.6'
+              }}>
+                <li>• Check your spelling (e.g., "Brazil" not "Brasil")</li>
+                <li>• Use the official country name (e.g., "United States" not "USA")</li>
+                <li>• Try alternative names (e.g., "South Korea" or "Korea")</li>
+                <li>• Avoid numbers or special characters</li>
+              </ul>
+            </div>
+            <button
+              onClick={() => {
+                setError(null);
+                setCountryData(null);
+              }}
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                color: 'white',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                padding: '12px 24px',
+                borderRadius: '25px',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '500',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+              }}
+            >
+              🔍 Try Another Search
+            </button>
           </div>
         )}
 

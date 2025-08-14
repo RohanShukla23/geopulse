@@ -1,17 +1,15 @@
 # GeoPulse 🌍
 
-Hey there! I built this full-stack application because I'm fascinated by how interconnected our world is. Ever wondered what's happening in a specific country right now? This app lets you type in any country name and instantly get a comprehensive snapshot: population stats, current weather, latest news headlines, and even a geopolitical risk assessment.
+Hi! I built this full-stack application because I'm fascinated by how interconnected our world is and I love reading global news. Ever wondered what's happening in a specific country right now? This app lets you type in any country name and instantly get a comprehensive snapshot: population stats, latest news headlines, and even a geopolitical risk assessment.
 
-## What Makes This Cool
+## what makes this cool?
 
 - **Real-time Data Fusion**: Combines multiple APIs and web scraping to paint a complete picture
 - **Live News Scraping**: Pulls fresh headlines from local news sources using RSS feeds
-- **Weather Integration**: Shows current conditions and forecasts
 - **Demographic Insights**: Population, GDP, and key statistics
 - **Risk Assessment**: Geopolitical stability indicators
-- **Clean Architecture**: Organized backend with Spring Boot and responsive React frontend
-
-## Prerequisites
+ 
+## prerequisites
 
 Before you dive in, make sure you have:
 - **Java 17** or higher
@@ -19,15 +17,15 @@ Before you dive in, make sure you have:
 - **Maven** (for backend dependency management)
 - Internet connection (for API calls and scraping)
 
-## Getting Started
+## getting started
 
-### 1. Clone the Repository
+### 1. clone the repository
 ```bash
 git clone <your-repo-url>
 cd geopolitics-app
 ```
 
-### 2. Start the Backend
+### 2. start the backend
 ```bash
 cd backend
 mvn spring-boot:run
@@ -45,10 +43,10 @@ The frontend will open at `http://localhost:3000`
 ### 4. Try It Out!
 
 Open your browser to `http://localhost:3000` and try searching for:
-- **"Germany"** - Should show Berlin weather, German news, population ~83M
-- **"Japan"** - Tokyo conditions, Japanese headlines, demographic data
-- **"Brazil"** - Brasília weather, Portuguese news sources, 215M+ population
-- **"Norway"** - Oslo conditions, Norwegian headlines, high stability index
+- **"Germany"** - Should show capital (Berlin), German news, population ~83M
+- **"Japan"** - Tokyo, Japanese headlines, demographic data
+- **"Brazil"** - Brasília as the capital, Portuguese news sources, 215M+ population
+- **"Norway"** - Oslo is the capital, Norwegian headlines, high stability index
 
 ## Folder & File Mapping
 
@@ -61,11 +59,9 @@ backend/
 │   ├── service/
 │   │   ├── CountryDataService.java
 │   │   ├── NewsScrapingService.java
-│   │   └── WeatherService.java
 │   └── model/
 │       ├── CountryInfo.java
 │       ├── NewsArticle.java
-│       └── WeatherData.java
 ├── resources/
 │   └── application.properties
 └── pom.xml
@@ -98,7 +94,7 @@ Root Files:
 4. **Response Delivery**: Returns unified JSON with all data points
 5. **Frontend Rendering**: React displays everything in a clean dashboard
 
-The backend uses an in-memory H2 database to cache results for 10 minutes, making repeat searches lightning-fast while keeping data fresh.
+The backend uses an in-memory H2 database to cache results for 10 minutes, making repeat searches fast while keeping data fresh.
 
 ## Tech Stack
 

@@ -49,14 +49,14 @@ function App() {
             fontWeight: '700',
             textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
           }}>
-            🌍 GeoInsight Hub
+            🌍 GeoPulse Hub
           </h1>
           <p style={{
             fontSize: '1.2rem',
             margin: '0',
             opacity: '0.9'
           }}>
-            Explore geopolitical data, demographics, weather, and news for any country
+            Explore comprehensive country data, demographics, latest news, and geopolitical insights
           </p>
         </header>
 
@@ -179,7 +179,7 @@ function App() {
               color: '#333',
               marginBottom: '20px'
             }}>
-              Welcome to GeoInsight Hub! 🚀
+              Welcome to GeoPulse Hub! 🚀
             </h2>
             <p style={{
               color: '#666',
@@ -189,29 +189,42 @@ function App() {
               margin: '0 auto 30px auto'
             }}>
               Get comprehensive insights about any country including demographics, 
-              current weather conditions, latest news headlines, and geopolitical risk assessments.
+              economic indicators, latest news headlines, and geopolitical risk assessments 
+              based on current global conditions.
             </p>
             <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-              gap: '15px'
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '15px',
+              maxWidth: '600px',
+              margin: '0 auto'
             }}>
-              {['Germany', 'Japan', 'Brazil', 'Norway'].map(country => (
+              {[
+                { name: 'Germany', flag: '🇩🇪', risk: 'Low' },
+                { name: 'Japan', flag: '🇯🇵', risk: 'Low' },
+                { name: 'Brazil', flag: '🇧🇷', risk: 'Medium' },
+                { name: 'Norway', flag: '🇳🇴', risk: 'Very Low' },
+                { name: 'India', flag: '🇮🇳', risk: 'Medium' },
+                { name: 'Australia', flag: '🇦🇺', risk: 'Low' }
+              ].map(country => (
                 <button
-                  key={country}
-                  onClick={() => handleSearch(country)}
+                  key={country.name}
+                  onClick={() => handleSearch(country.name)}
                   style={{
                     backgroundColor: '#667eea',
                     color: 'white',
                     border: 'none',
-                    padding: '12px 24px',
-                    borderRadius: '25px',
+                    padding: '15px 20px',
+                    borderRadius: '12px',
                     cursor: 'pointer',
-                    fontSize: '1rem',
+                    fontSize: '0.95rem',
                     fontWeight: '500',
                     transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
+                    boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '8px'
                   }}
                   onMouseOver={(e) => {
                     e.target.style.backgroundColor = '#5a6fd8';
@@ -222,7 +235,15 @@ function App() {
                     e.target.style.transform = 'translateY(0)';
                   }}
                 >
-                  Try {country}
+                  <span style={{ fontSize: '1.5rem' }}>{country.flag}</span>
+                  <span>{country.name}</span>
+                  <span style={{ 
+                    fontSize: '0.8rem', 
+                    opacity: '0.8',
+                    fontStyle: 'italic'
+                  }}>
+                    {country.risk} Risk
+                  </span>
                 </button>
               ))}
             </div>

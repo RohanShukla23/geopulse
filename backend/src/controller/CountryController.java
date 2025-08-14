@@ -3,10 +3,8 @@ package com.geopulse.controller;
 import com.geopulse.model.CountryInfo;
 import com.geopulse.model.CountryNotFoundException;
 import com.geopulse.model.NewsArticle;
-import com.geopulse.model.WeatherData;
 import com.geopulse.service.CountryDataService;
 import com.geopulse.service.NewsScrapingService;
-import com.geopulse.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +24,6 @@ public class CountryController {
     
     @Autowired
     private CountryDataService countryDataService;
-    
-    @Autowired
-    private WeatherService weatherService;
     
     @Autowired
     private NewsScrapingService newsScrapingService;
@@ -64,15 +59,15 @@ public class CountryController {
             CountryInfo cachedInfo = getCachedCountryInfo(cleanCountryName);
             
             if (cachedInfo != null && cachedInfo.isCacheValid()) {
-                // Add live data (weather and news)
-                addLiveData(cachedInfo);
+                // Add live news data
+                addLiveNewsData(cachedInfo);
                 return ResponseEntity.ok(cachedInfo);
             }
             
             // Fetch fresh data
             CountryInfo countryInfo = fetchCompleteCountryData(cleanCountryName);
             
-            // Cache the basic country info (not weather/news as they're real-time)
+            // Cache the basic country info (not news as they're real-time)
             cacheCountryInfo(countryInfo);
             
             return ResponseEntity.ok(countryInfo);
@@ -110,26 +105,13 @@ public class CountryController {
             CompletableFuture<CountryInfo> countryFuture = 
                 CompletableFuture.supplyAsync(() -> countryDataService.fetchCountryData(countryName));
             
-            CompletableFuture<WeatherData> weatherFuture = 
-                CompletableFuture.supplyAsync(() -> {
-                    // Use country name as city for weather (fallback logic)
-                    return weatherService.fetchWeatherData(countryName);
-                });
-            
             CompletableFuture<List<NewsArticle>> newsFuture = 
                 CompletableFuture.supplyAsync(() -> newsScrapingService.fetchNewsForCountry(countryName));
             
             // Wait for all to complete
             CountryInfo countryInfo = countryFuture.get();
-            WeatherData weather = weatherFuture.get();
             List<NewsArticle> news = newsFuture.get();
             
-            // If weather fetch failed with country name, try with capital
-            if (weather.getTemperature() == null && countryInfo.getCapital() != null) {
-                weather = weatherService.fetchWeatherData(countryInfo.getCapital());
-            }
-            
-            countryInfo.setWeather(weather);
             countryInfo.setNews(news);
             
             return countryInfo;
@@ -144,34 +126,23 @@ public class CountryController {
     private CountryInfo fetchSequentialCountryData(String countryName) {
         CountryInfo countryInfo = countryDataService.fetchCountryData(countryName);
         
-        WeatherData weather = weatherService.fetchWeatherData(
-            countryInfo.getCapital() != null ? countryInfo.getCapital() : countryName);
-        countryInfo.setWeather(weather);
-        
         List<NewsArticle> news = newsScrapingService.fetchNewsForCountry(countryName);
         countryInfo.setNews(news);
         
         return countryInfo;
     }
     
-    private void addLiveData(CountryInfo countryInfo) {
+    private void addLiveNewsData(CountryInfo countryInfo) {
         try {
-            // Always fetch fresh weather and news data
-            String cityForWeather = countryInfo.getCapital() != null ? 
-                countryInfo.getCapital() : countryInfo.getCountryName();
-            
-            CompletableFuture<WeatherData> weatherFuture = 
-                CompletableFuture.supplyAsync(() -> weatherService.fetchWeatherData(cityForWeather));
-            
+            // Always fetch fresh news data
             CompletableFuture<List<NewsArticle>> newsFuture = 
                 CompletableFuture.supplyAsync(() -> 
                     newsScrapingService.fetchNewsForCountry(countryInfo.getCountryName()));
             
-            countryInfo.setWeather(weatherFuture.get());
             countryInfo.setNews(newsFuture.get());
             
         } catch (Exception e) {
-            System.err.println("Error fetching live data: " + e.getMessage());
+            System.err.println("Error fetching live news data: " + e.getMessage());
             // Continue with cached data only
         }
     }
@@ -194,7 +165,7 @@ public class CountryController {
     
     private void cacheCountryInfo(CountryInfo countryInfo) {
         try {
-            // Remove weather and news before caching (they're real-time)
+            // Remove news before caching (they're real-time)
             CountryInfo cacheInfo = new CountryInfo(countryInfo.getCountryName());
             cacheInfo.setCapital(countryInfo.getCapital());
             cacheInfo.setPopulation(countryInfo.getPopulation());
@@ -205,6 +176,7 @@ public class CountryController {
             cacheInfo.setLanguage(countryInfo.getLanguage());
             cacheInfo.setGdpPerCapita(countryInfo.getGdpPerCapita());
             cacheInfo.setGeopoliticalRiskIndex(countryInfo.getGeopoliticalRiskIndex());
+            cacheInfo.setFlagEmoji(countryInfo.getFlagEmoji());
             
             entityManager.persist(cacheInfo);
             
@@ -224,6 +196,7 @@ public class CountryController {
         errorInfo.setLanguage("N/A");
         errorInfo.setGdpPerCapita(0.0);
         errorInfo.setGeopoliticalRiskIndex(0.0);
+        errorInfo.setFlagEmoji("🏳️");
         return errorInfo;
     }
 }

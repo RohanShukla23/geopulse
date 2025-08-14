@@ -170,7 +170,7 @@ const CountrySearch = ({ onSearch, disabled = false }) => {
               }
             }}
           >
-            {disabled ? '🔍' : 'Explore'}
+            {disabled ? '🔒' : 'Explore'}
           </button>
         </div>
       </form>
@@ -208,7 +208,7 @@ const CountrySearch = ({ onSearch, disabled = false }) => {
               }}
               onMouseEnter={() => setSelectedIndex(index)}
             >
-              🏳️ {suggestion}
+              🏴 {suggestion}
             </div>
           ))}
         </div>
@@ -222,39 +222,46 @@ const CountrySearch = ({ onSearch, disabled = false }) => {
         marginTop: '20px',
         flexWrap: 'wrap'
       }}>
-        {['🇩🇪 Germany', '🇯🇵 Japan', '🇧🇷 Brazil', '🇳🇴 Norway', '🇺🇸 USA'].map(country => {
-          const countryName = country.split(' ')[1];
-          return (
-            <button
-              key={countryName}
-              onClick={() => !disabled && onSearch(countryName)}
-              disabled={disabled}
-              style={{
-                backgroundColor: 'rgba(255,255,255,0.2)',
-                color: 'white',
-                border: '1px solid rgba(255,255,255,0.3)',
-                padding: '8px 16px',
-                borderRadius: '20px',
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                fontSize: '0.9rem',
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)'
-              }}
-              onMouseOver={(e) => {
-                if (!disabled) {
-                  e.target.style.backgroundColor = 'rgba(255,255,255,0.3)';
-                }
-              }}
-              onMouseOut={(e) => {
-                if (!disabled) {
-                  e.target.style.backgroundColor = 'rgba(255,255,255,0.2)';
-                }
-              }}
-            >
-              {country}
-            </button>
-          );
-        })}
+        {[
+          { name: 'Germany', flag: '🇩🇪' },
+          { name: 'Japan', flag: '🇯🇵' },
+          { name: 'Brazil', flag: '🇧🇷' },
+          { name: 'Norway', flag: '🇳🇴' },
+          { name: 'India', flag: '🇮🇳' }
+        ].map(country => (
+          <button
+            key={country.name}
+            onClick={() => !disabled && onSearch(country.name)}
+            disabled={disabled}
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              color: 'white',
+              border: '1px solid rgba(255,255,255,0.3)',
+              padding: '8px 16px',
+              borderRadius: '20px',
+              cursor: disabled ? 'not-allowed' : 'pointer',
+              fontSize: '0.9rem',
+              transition: 'all 0.3s ease',
+              backdropFilter: 'blur(10px)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+            onMouseOver={(e) => {
+              if (!disabled) {
+                e.target.style.backgroundColor = 'rgba(255,255,255,0.3)';
+              }
+            }}
+            onMouseOut={(e) => {
+              if (!disabled) {
+                e.target.style.backgroundColor = 'rgba(255,255,255,0.2)';
+              }
+            }}
+          >
+            <span>{country.flag}</span>
+            <span>{country.name}</span>
+          </button>
+        ))}
       </div>
     </div>
   );

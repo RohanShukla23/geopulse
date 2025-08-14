@@ -23,15 +23,13 @@ public class CountryInfo {
     private String currency;
     private String language;
     private Double gdpPerCapita;
+    private String flagEmoji;
     
     @Column(name = "risk_index")
     private Double geopoliticalRiskIndex;
     
     @Column(name = "cached_at")
     private LocalDateTime cachedAt;
-    
-    @Transient
-    private WeatherData weather;
     
     @Transient
     private List<NewsArticle> news;
@@ -77,6 +75,9 @@ public class CountryInfo {
     public Double getGdpPerCapita() { return gdpPerCapita; }
     public void setGdpPerCapita(Double gdpPerCapita) { this.gdpPerCapita = gdpPerCapita; }
     
+    public String getFlagEmoji() { return flagEmoji; }
+    public void setFlagEmoji(String flagEmoji) { this.flagEmoji = flagEmoji; }
+    
     public Double getGeopoliticalRiskIndex() { return geopoliticalRiskIndex; }
     public void setGeopoliticalRiskIndex(Double geopoliticalRiskIndex) { 
         this.geopoliticalRiskIndex = geopoliticalRiskIndex; 
@@ -84,9 +85,6 @@ public class CountryInfo {
     
     public LocalDateTime getCachedAt() { return cachedAt; }
     public void setCachedAt(LocalDateTime cachedAt) { this.cachedAt = cachedAt; }
-    
-    public WeatherData getWeather() { return weather; }
-    public void setWeather(WeatherData weather) { this.weather = weather; }
     
     public List<NewsArticle> getNews() { return news; }
     public void setNews(List<NewsArticle> news) { this.news = news; }

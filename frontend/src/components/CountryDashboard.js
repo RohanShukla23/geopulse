@@ -20,16 +20,29 @@ const CountryDashboard = ({ data }) => {
 
   const getRiskColor = (riskIndex) => {
     if (!riskIndex) return '#95a5a6';
-    if (riskIndex <= 3) return '#27ae60'; // Low risk - green
-    if (riskIndex <= 6) return '#f39c12'; // Medium risk - orange
-    return '#e74c3c'; // High risk - red
+    if (riskIndex <= 2.0) return '#27ae60'; // Very Low risk - green
+    if (riskIndex <= 3.5) return '#2ecc71'; // Low risk - light green
+    if (riskIndex <= 5.0) return '#f39c12'; // Medium risk - orange
+    if (riskIndex <= 7.0) return '#e67e22'; // High risk - dark orange
+    return '#e74c3c'; // Very High risk - red
   };
 
   const getRiskLabel = (riskIndex) => {
     if (!riskIndex) return 'Unknown';
-    if (riskIndex <= 3) return 'Low Risk';
-    if (riskIndex <= 6) return 'Medium Risk';
-    return 'High Risk';
+    if (riskIndex <= 2.0) return 'Very Low Risk';
+    if (riskIndex <= 3.5) return 'Low Risk';
+    if (riskIndex <= 5.0) return 'Medium Risk';
+    if (riskIndex <= 7.0) return 'High Risk';
+    return 'Very High Risk';
+  };
+
+  const getRiskDescription = (riskIndex) => {
+    if (!riskIndex) return 'Risk assessment unavailable';
+    if (riskIndex <= 2.0) return 'Highly stable political environment';
+    if (riskIndex <= 3.5) return 'Stable with low political risk';
+    if (riskIndex <= 5.0) return 'Moderate political uncertainty';
+    if (riskIndex <= 7.0) return 'Significant political risks present';
+    return 'High political instability and risks';
   };
 
   return (
@@ -51,23 +64,30 @@ const CountryDashboard = ({ data }) => {
           fontSize: '2.5rem',
           margin: '0 0 10px 0',
           color: '#2c3e50',
-          fontWeight: '700'
+          fontWeight: '700',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '15px'
         }}>
-          🏳️ {data.countryName}
+          <span style={{ fontSize: '3rem' }}>{data.flagEmoji || '🏴'}</span>
+          {data.countryName}
         </h1>
         <p style={{
           fontSize: '1.2rem',
           color: '#7f8c8d',
           margin: '0'
         }}>
-          {data.capital && `Capital: ${data.capital}`} • {data.region}
+          {data.capital && data.capital !== 'N/A' && `Capital: ${data.capital}`}
+          {data.capital && data.capital !== 'N/A' && data.region && ' • '}
+          {data.region}
         </p>
       </div>
 
       {/* Stats Grid */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
         gap: '20px'
       }}>
         {/* Demographics Card */}
@@ -84,7 +104,7 @@ const CountryDashboard = ({ data }) => {
             alignItems: 'center',
             gap: '10px'
           }}>
-            👥 Demographics
+            👥 Demographics & Economy
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -107,60 +127,14 @@ const CountryDashboard = ({ data }) => {
               <span style={{ color: '#7f8c8d' }}>Language:</span>
               <strong>{data.language || 'N/A'}</strong>
             </div>
+            {data.subregion && (
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: '#7f8c8d' }}>Subregion:</span>
+                <strong>{data.subregion}</strong>
+              </div>
+            )}
           </div>
         </div>
-
-        {/* Weather Card */}
-        {data.weather && (
-          <div className="card-hover" style={{
-            backgroundColor: 'rgba(255,255,255,0.95)',
-            padding: '25px',
-            borderRadius: '16px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
-          }}>
-            <h3 style={{
-              color: '#2c3e50',
-              marginBottom: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}>
-              🌤️ Weather in {data.weather.city}
-            </h3>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '20px'
-            }}>
-              <span style={{
-                fontSize: '3rem',
-                fontWeight: 'bold',
-                color: '#3498db'
-              }}>
-                {data.weather.temperature ? `${Math.round(data.weather.temperature)}°C` : 'N/A'}
-              </span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: '#7f8c8d' }}>Feels like:</span>
-                <strong>{data.weather.feelsLike ? `${Math.round(data.weather.feelsLike)}°C` : 'N/A'}</strong>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: '#7f8c8d' }}>Condition:</span>
-                <strong>{data.weather.description || 'N/A'}</strong>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: '#7f8c8d' }}>Humidity:</span>
-                <strong>{data.weather.humidity ? `${data.weather.humidity}%` : 'N/A'}</strong>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: '#7f8c8d' }}>Wind Speed:</span>
-                <strong>{data.weather.windSpeed ? `${Math.round(data.weather.windSpeed * 10) / 10} m/s` : 'N/A'}</strong>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Risk Assessment Card */}
         <div className="card-hover" style={{
@@ -176,7 +150,7 @@ const CountryDashboard = ({ data }) => {
             alignItems: 'center',
             gap: '10px'
           }}>
-            ⚖️ Geopolitical Risk
+            ⚖️ Geopolitical Risk Assessment
           </h3>
           <div style={{
             display: 'flex',
@@ -185,31 +159,44 @@ const CountryDashboard = ({ data }) => {
             marginBottom: '20px'
           }}>
             <div style={{
-              width: '80px',
-              height: '80px',
+              width: '100px',
+              height: '100px',
               borderRadius: '50%',
               backgroundColor: getRiskColor(data.geopoliticalRiskIndex),
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: 'white',
-              fontSize: '1.5rem',
-              fontWeight: 'bold'
+              fontSize: '1.8rem',
+              fontWeight: 'bold',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
             }}>
               {data.geopoliticalRiskIndex ? data.geopoliticalRiskIndex.toFixed(1) : 'N/A'}
             </div>
           </div>
           <div style={{ textAlign: 'center' }}>
             <div style={{
-              fontSize: '1.2rem',
+              fontSize: '1.3rem',
               fontWeight: 'bold',
               color: getRiskColor(data.geopoliticalRiskIndex),
               marginBottom: '10px'
             }}>
               {getRiskLabel(data.geopoliticalRiskIndex)}
             </div>
-            <div style={{ color: '#7f8c8d', fontSize: '0.9rem' }}>
-              Risk Index (0-10 scale, lower is better)
+            <div style={{ 
+              color: '#7f8c8d', 
+              fontSize: '0.95rem',
+              marginBottom: '15px',
+              lineHeight: '1.4'
+            }}>
+              {getRiskDescription(data.geopoliticalRiskIndex)}
+            </div>
+            <div style={{ 
+              color: '#95a5a6', 
+              fontSize: '0.85rem',
+              fontStyle: 'italic'
+            }}>
+              Risk Index: 0-10 scale (lower is better)
             </div>
           </div>
         </div>
@@ -230,13 +217,13 @@ const CountryDashboard = ({ data }) => {
             alignItems: 'center',
             gap: '10px'
           }}>
-            📰 Latest News
+            📰 Latest News & Headlines
           </h3>
           <div style={{
             display: 'grid',
             gap: '15px'
           }}>
-            {data.news.slice(0, 6).map((article, index) => (
+            {data.news.slice(0, 8).map((article, index) => (
               <div
                 key={index}
                 style={{
@@ -244,7 +231,8 @@ const CountryDashboard = ({ data }) => {
                   borderRadius: '12px',
                   backgroundColor: '#f8f9fa',
                   borderLeft: '4px solid #667eea',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  cursor: article.url ? 'pointer' : 'default'
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.backgroundColor = '#e9ecef';
@@ -253,6 +241,11 @@ const CountryDashboard = ({ data }) => {
                 onMouseOut={(e) => {
                   e.currentTarget.style.backgroundColor = '#f8f9fa';
                   e.currentTarget.style.transform = 'translateX(0)';
+                }}
+                onClick={() => {
+                  if (article.url && article.url !== 'https://example.com/news/' + (index + 1)) {
+                    window.open(article.url, '_blank', 'noopener,noreferrer');
+                  }
                 }}
               >
                 <h4 style={{
@@ -281,19 +274,13 @@ const CountryDashboard = ({ data }) => {
                   color: '#adb5bd'
                 }}>
                   <span>📡 {article.source || 'News Source'}</span>
-                  {article.url && (
-                    <a
-                      href={article.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        color: '#667eea',
-                        textDecoration: 'none',
-                        fontWeight: '500'
-                      }}
-                    >
+                  {article.url && article.url !== 'https://example.com/news/' + (index + 1) && (
+                    <span style={{
+                      color: '#667eea',
+                      fontWeight: '500'
+                    }}>
                       Read more →
-                    </a>
+                    </span>
                   )}
                 </div>
               </div>
@@ -301,6 +288,21 @@ const CountryDashboard = ({ data }) => {
           </div>
         </div>
       )}
+
+      {/* Info Footer */}
+      <div style={{
+        backgroundColor: 'rgba(255,255,255,0.8)',
+        padding: '20px',
+        borderRadius: '12px',
+        textAlign: 'center',
+        fontSize: '0.9rem',
+        color: '#7f8c8d'
+      }}>
+        <p style={{ margin: '0' }}>
+          📊 Data sources: REST Countries API, RSS news feeds, and geopolitical risk analysis. 
+          Last updated: {new Date().toLocaleDateString()}
+        </p>
+      </div>
     </div>
   );
 };

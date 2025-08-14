@@ -1,105 +1,94 @@
 # GeoPulse 🌍
 
-Hi! I built this full-stack application because I'm fascinated by how interconnected our world is and I love reading global news. Ever wondered what's happening in a specific country right now? This app lets you type in any country name and instantly get a comprehensive snapshot: population stats, latest news headlines, and even a geopolitical risk assessment.
+Ever get curious about what's happening somewhere in the world right now? Like, what's the latest news in Thailand, or how's the political situation in Chile? 
 
-## what makes this cool?
+I built GeoPulse because I'm a bit of a news junkie and geography nerd. Just type any country name you get the full picture: population stats, breaking news from local sources, and even how stable things are politically.
 
-- **Real-time Data Fusion**: Combines multiple APIs and web scraping to paint a complete picture
-- **Live News Scraping**: Pulls fresh headlines from local news sources using RSS feeds
-- **Demographic Insights**: Population, GDP, and key statistics
-- **Risk Assessment**: Geopolitical stability indicators
- 
-## prerequisites
+## what makes this thing cool?
 
-Before you dive in, make sure you have:
-- **Java 17** or higher
-- **Node.js 18** or higher
-- **Maven** (for backend dependency management)
-- Internet connection (for API calls and scraping)
+- **actually fresh data** - pulls live news from local RSS feeds, not just generic international coverage
+- **one search, everything** - population, GDP, news, risk levels all in one place  
+- **pretty fast** - caches results so you're not waiting around
+- **real local sources** - German news from Germany, Japanese headlines from Japan, etc.
 
-## getting started
+## what you'll need
 
-### 1. clone the repository
+- **Java 17+** (or whatever newer version you have)
+- **Node.js 18+** 
+- **Maven** (for the Java stuff)
+- Internet connection (obviously)
+
+## getting it running
+
+### clone and enter
 ```bash
 git clone <your-repo-url>
 cd geopolitics-app
 ```
 
-### 2. start the backend
+### fire up the backend
 ```bash
 cd backend
 mvn spring-boot:run
 ```
-The backend will start on `http://localhost:8080`
+Backend lives at `http://localhost:8080`
 
-### 3. Launch the Frontend
+### start the frontend
 ```bash
 cd frontend
 npm install
 npm start
 ```
-The frontend will open at `http://localhost:3000`
+Frontend opens at `http://localhost:3000`
 
-### 4. Try It Out!
+### test drive
+Try searching for some countries to see if everything's working:
+- **Germany** → should show Berlin, German headlines, ~83M people
+- **Japan** → Tokyo, Japanese news, demographic stuff
+- **Brazil** → Brasília, Portuguese sources, 215M+ population  
+- **Singapore** → tiny but mighty, usually very stable
 
-Open your browser to `http://localhost:3000` and try searching for:
-- **"Germany"** - Should show capital (Berlin), German news, population ~83M
-- **"Japan"** - Tokyo, Japanese headlines, demographic data
-- **"Brazil"** - Brasília as the capital, Portuguese news sources, 215M+ population
-- **"Norway"** - Oslo is the capital, Norwegian headlines, high stability index
-
-## Folder & File Mapping
+## how the code's organized
 
 ```
 backend/
 ├── src/
-│   ├── controller/
-│   │   ├── CountryController.java
-│   │   └── HealthController.java
-│   ├── service/
-│   │   ├── CountryDataService.java
-│   │   ├── NewsScrapingService.java
-│   └── model/
-│       ├── CountryInfo.java
-│       ├── NewsArticle.java
+│   ├── controller/           # API endpoints
+│   ├── service/             # the actual logic
+│   └── model/               # data structures
 ├── resources/
-│   └── application.properties
 └── pom.xml
 
 frontend/
 ├── src/
-│   ├── components/
-│   │   ├── CountrySearch.js
-│   │   ├── CountryDashboard.js
-│   │   └── LoadingSpinner.js
-│   ├── services/
-│   │   └── apiService.js
-│   ├── App.js
-│   └── index.js
-├── public/
-│   └── index.html
+│   ├── components/          # React components
+│   ├── services/            # API calls
+│   └── App.js              # main app
 └── package.json
 
-Root Files:
+# usual suspects
 ├── .gitignore
-├── LICENSE
-└── README.md
+├── LICENSE  
+└── README.md (you're here!)
 ```
 
-## How It Works
+## under the hood
 
-1. **User Input**: Type a country name in the search box
-2. **Backend Processing**: Spring Boot orchestrates multiple service calls
-3. **Data Aggregation**: Combines REST API calls with web scraping
-4. **Response Delivery**: Returns unified JSON with all data points
-5. **Frontend Rendering**: React displays everything in a clean dashboard
+1. you type a country → frontend sends request
+2. Spring Boot backend hits multiple APIs and scrapes news
+3. everything gets mashed together into one clean response
+4. React displays it all nicely
+5. results get cached for 10 minutes (fast subsequent searches)
 
-The backend uses an in-memory H2 database to cache results for 10 minutes, making repeat searches fast while keeping data fresh.
+**tech stack:** Java 17 + Spring Boot + React + a bunch of APIs and web scraping magic
 
-## Tech Stack
+## troubleshooting
 
-**Backend**: Java 17, Spring Boot, Jsoup, H2 Database
-**Frontend**: React, Axios, CSS3
-**APIs Used**: REST Countries, OpenWeatherMap, RSS feeds
+- **backend won't start?** check your Java version
+- **no news showing up?** some countries have limited RSS feeds
+- **weird data?** the APIs sometimes return funky results for smaller countries
+- **slow searches?** first search per country takes longer (no cache yet)
 
-Enjoy exploring the world's data! 🚀
+---
+
+built this because the world's fascinating and news shouldn't be hard to find. enjoy exploring! 🚀

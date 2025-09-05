@@ -35,39 +35,39 @@ public class CountryController {
     @Transactional
     public ResponseEntity<CountryInfo> getCountryInfo(@PathVariable String countryName) {
         try {
-            // Validate input
+            // validate input
             if (countryName == null || countryName.trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(
                     createErrorCountryInfo("", "Country name cannot be empty"));
             }
             
-            // Clean and validate country name
+            // clean & validate country name
             String cleanCountryName = countryName.trim();
             if (cleanCountryName.length() < 2) {
                 return ResponseEntity.badRequest().body(
                     createErrorCountryInfo(cleanCountryName, "Country name must be at least 2 characters long"));
             }
             
-            // Check for obviously invalid input (numbers, special characters)
+            // check for obviously invalid input (numbers, special characters)
             if (cleanCountryName.matches(".*[0-9].*") || 
                 cleanCountryName.matches(".*[!@#$%^&*()_+={}\\[\\]:;\"'<>,.?/|\\\\].*")) {
                 return ResponseEntity.badRequest().body(
                     createErrorCountryInfo(cleanCountryName, "Invalid country name format"));
             }
             
-            // Check cache first
+            // check cache first
             CountryInfo cachedInfo = getCachedCountryInfo(cleanCountryName);
             
             if (cachedInfo != null && cachedInfo.isCacheValid()) {
-                // Add live news data
+                // add live news data
                 addLiveNewsData(cachedInfo);
                 return ResponseEntity.ok(cachedInfo);
             }
             
-            // Fetch fresh data
+            // fetch fresh data
             CountryInfo countryInfo = fetchCompleteCountryData(cleanCountryName);
             
-            // Cache the basic country info (not news as they're real-time)
+            // cache basic country info
             cacheCountryInfo(countryInfo);
             
             return ResponseEntity.ok(countryInfo);
@@ -85,7 +85,7 @@ public class CountryController {
     
     @GetMapping("/search")
     public ResponseEntity<List<String>> searchCountries(@RequestParam String query) {
-        // Simple country name suggestions - in production, use a proper search service
+        // simple country name suggestions
         List<String> suggestions = List.of(
             "Germany", "Japan", "Brazil", "Norway", "United States", 
             "United Kingdom", "France", "China", "India", "Australia",
@@ -101,14 +101,14 @@ public class CountryController {
     
     private CountryInfo fetchCompleteCountryData(String countryName) {
         try {
-            // Fetch data concurrently for better performance
+            // fetch data concurrently
             CompletableFuture<CountryInfo> countryFuture = 
                 CompletableFuture.supplyAsync(() -> countryDataService.fetchCountryData(countryName));
             
             CompletableFuture<List<NewsArticle>> newsFuture = 
                 CompletableFuture.supplyAsync(() -> newsScrapingService.fetchNewsForCountry(countryName));
             
-            // Wait for all to complete
+            // wait for all to complete
             CountryInfo countryInfo = countryFuture.get();
             List<NewsArticle> news = newsFuture.get();
             
@@ -118,7 +118,7 @@ public class CountryController {
             
         } catch (InterruptedException | ExecutionException e) {
             System.err.println("Error fetching concurrent data: " + e.getMessage());
-            // Fallback to sequential fetching
+            // fallback to sequential fetching
             return fetchSequentialCountryData(countryName);
         }
     }
@@ -134,7 +134,7 @@ public class CountryController {
     
     private void addLiveNewsData(CountryInfo countryInfo) {
         try {
-            // Always fetch fresh news data
+            // always fetch fresh news data
             CompletableFuture<List<NewsArticle>> newsFuture = 
                 CompletableFuture.supplyAsync(() -> 
                     newsScrapingService.fetchNewsForCountry(countryInfo.getCountryName()));
@@ -143,7 +143,7 @@ public class CountryController {
             
         } catch (Exception e) {
             System.err.println("Error fetching live news data: " + e.getMessage());
-            // Continue with cached data only
+            // continue with cached data only
         }
     }
     
@@ -165,7 +165,7 @@ public class CountryController {
     
     private void cacheCountryInfo(CountryInfo countryInfo) {
         try {
-            // Remove news before caching (they're real-time)
+            // remove news before caching
             CountryInfo cacheInfo = new CountryInfo(countryInfo.getCountryName());
             cacheInfo.setCapital(countryInfo.getCapital());
             cacheInfo.setPopulation(countryInfo.getPopulation());

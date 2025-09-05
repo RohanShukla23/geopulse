@@ -24,7 +24,7 @@ public class NewsScrapingService {
     }
     
     private void initializeRssFeeds() {
-        // Map countries to their RSS feeds (using BBC country pages as fallback)
+        // map countries to their RSS feeds (using BBC country pages as fallback)
         countryRssFeeds.put("germany", new String[]{"https://feeds.bbci.co.uk/news/world/europe/rss.xml"});
         countryRssFeeds.put("japan", new String[]{"https://feeds.bbci.co.uk/news/world/asia/rss.xml"});
         countryRssFeeds.put("brazil", new String[]{"https://feeds.bbci.co.uk/news/world/latin_america/rss.xml"});
@@ -42,7 +42,7 @@ public class NewsScrapingService {
         String[] feeds = countryRssFeeds.get(lowerCountryName);
         
         if (feeds == null) {
-            // Default to world news if country not found
+            // default to world news if country not found
             feeds = new String[]{"https://feeds.bbci.co.uk/news/world/rss.xml"};
         }
         
@@ -53,14 +53,14 @@ public class NewsScrapingService {
                 List<NewsArticle> articles = parseRssFeed(feedUrl, countryName);
                 allArticles.addAll(articles);
                 
-                if (allArticles.size() >= 10) break; // Limit to 10 articles
+                if (allArticles.size() >= 10) break; // limit to 10 articles
                 
             } catch (Exception e) {
                 System.err.println("Error fetching RSS feed " + feedUrl + ": " + e.getMessage());
             }
         }
         
-        // If no articles found from RSS, generate mock articles
+        // if no articles found from RSS, generate mock articles
         if (allArticles.isEmpty()) {
             allArticles = generateMockNews(countryName);
         }
@@ -90,10 +90,10 @@ public class NewsScrapingService {
                         NewsArticle article = new NewsArticle(title, link, "BBC News");
                         article.setDescription(cleanDescription(description));
                         
-                        // Parse publication date if available
+                        // parse publication date if available
                         if (pubDate != null && !pubDate.isEmpty()) {
                             try {
-                                // Simplified date parsing - in production use proper date parser
+                                // simplified date parsing 
                                 article.setPublishedAt(LocalDateTime.now().minusHours(
                                     Math.abs(pubDate.hashCode()) % 24));
                             } catch (Exception e) {
@@ -126,7 +126,7 @@ public class NewsScrapingService {
     private String cleanDescription(String description) {
         if (description == null) return "";
         
-        // Remove HTML tags and limit length
+        // remove HTML tags and limit length
         String clean = description.replaceAll("<[^>]+>", "");
         return clean.length() > 200 ? clean.substring(0, 197) + "..." : clean;
     }

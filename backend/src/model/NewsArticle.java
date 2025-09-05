@@ -11,7 +11,7 @@ public class NewsArticle {
     private LocalDateTime publishedAt;
     private String category;
     
-    // Constructors
+    // constructors
     public NewsArticle() {}
     
     public NewsArticle(String title, String url, String source) {
@@ -21,7 +21,7 @@ public class NewsArticle {
         this.publishedAt = LocalDateTime.now();
     }
     
-    // Getters and Setters
+    // getters & setters
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
     
@@ -40,7 +40,7 @@ public class NewsArticle {
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
     
-    // Helper method to get display-friendly published time
+    // helper method to get display-friendly published time
     public String getTimeAgo() {
         if (publishedAt == null) return "Unknown";
         
@@ -49,14 +49,14 @@ public class NewsArticle {
         
         if (minutes < 60) {
             return minutes + " minutes ago";
-        } else if (minutes < 1440) { // 24 hours
+        } else if (minutes < 1440) { // 24 hrs
             return (minutes / 60) + " hours ago";
         } else {
             return (minutes / 1440) + " days ago";
         }
     }
     
-    // Helper method to truncate long titles
+    // helper method to truncate long titles
     public String getTruncatedTitle(int maxLength) {
         if (title == null) return "";
         return title.length() > maxLength ? 

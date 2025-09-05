@@ -24,11 +24,11 @@ public class CountryDataService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     
-    // Fixed: Dynamic risk calculation based on multiple factors instead of hard-coded values
+    // FIXED: dynamic risk calculation based on multiple factors
     private static final Map<String, Double> REGIONAL_BASE_RISK = new HashMap<>();
     private static final Map<String, RiskFactors> COUNTRY_RISK_FACTORS = new HashMap<>();
     
-    // Fixed: Risk factors structure for more accurate calculation
+    // FIXED: risk factors structure for more accurate calculation
     static class RiskFactors {
         double politicalStability; // -3 to +3 scale
         double conflictLevel;      // 0 to +4 scale
@@ -46,7 +46,7 @@ public class CountryDataService {
     }
     
     static {
-        // Regional base risk (1-4 scale, representing general regional stability)
+        // regional base risk (1-4 scale, general regional stability)
         REGIONAL_BASE_RISK.put("Europe", 2.0);
         REGIONAL_BASE_RISK.put("North America", 2.0);
         REGIONAL_BASE_RISK.put("Oceania", 1.8);
@@ -55,19 +55,19 @@ public class CountryDataService {
         REGIONAL_BASE_RISK.put("Africa", 4.0);
         REGIONAL_BASE_RISK.put("Antarctica", 0.5);
         
-        // Fixed: More accurate risk factors based on current geopolitical situation
-        // Ultra-stable democracies
+        // FIXED: Accurate risk factors based on current geopolitical situation
+        // ultra-stable democracies
         COUNTRY_RISK_FACTORS.put("Norway", new RiskFactors(-2.5, 0.0, -1.8, -2.0, 0.0));
         COUNTRY_RISK_FACTORS.put("Denmark", new RiskFactors(-2.5, 0.0, -1.5, -2.0, 0.0));
-        COUNTRY_RISK_FACTORS.put("Sweden", new RiskFactors(-2.2, 0.1, -1.3, -1.8, 0.2)); // Fixed: Slight increase due to security concerns
+        COUNTRY_RISK_FACTORS.put("Sweden", new RiskFactors(-2.2, 0.1, -1.3, -1.8, 0.2)); // FIXED: Slight increase due to security concerns
         COUNTRY_RISK_FACTORS.put("Switzerland", new RiskFactors(-2.5, 0.0, -1.8, -2.0, 0.0));
-        COUNTRY_RISK_FACTORS.put("Finland", new RiskFactors(-2.0, 0.2, -1.5, -1.8, 0.3)); // Fixed: Border with Russia adds slight risk
+        COUNTRY_RISK_FACTORS.put("Finland", new RiskFactors(-2.0, 0.2, -1.5, -1.8, 0.3)); // FIXED: Border with Russia adds slight risk
         COUNTRY_RISK_FACTORS.put("Iceland", new RiskFactors(-2.5, 0.0, -1.0, -1.8, 0.0));
         COUNTRY_RISK_FACTORS.put("New Zealand", new RiskFactors(-2.3, 0.0, -1.2, -1.8, 0.0));
         COUNTRY_RISK_FACTORS.put("Luxembourg", new RiskFactors(-2.3, 0.0, -1.8, -1.8, 0.0));
         
-        // Stable developed countries
-        COUNTRY_RISK_FACTORS.put("Germany", new RiskFactors(-1.8, 0.1, -1.2, -1.5, 0.2)); // Fixed: Calculate actual score instead of N/A
+        // stable developed countries
+        COUNTRY_RISK_FACTORS.put("Germany", new RiskFactors(-1.8, 0.1, -1.2, -1.5, 0.2)); // FIXED: Calculate actual score instead of N/A
         COUNTRY_RISK_FACTORS.put("Netherlands", new RiskFactors(-2.0, 0.0, -1.3, -1.6, 0.1));
         COUNTRY_RISK_FACTORS.put("Austria", new RiskFactors(-1.8, 0.0, -1.0, -1.4, 0.1));
         COUNTRY_RISK_FACTORS.put("Canada", new RiskFactors(-1.8, 0.0, -1.0, -1.3, 0.1));
@@ -78,7 +78,7 @@ public class CountryDataService {
         COUNTRY_RISK_FACTORS.put("United States", new RiskFactors(-0.5, 0.3, 0.2, -0.3, 0.5));
         COUNTRY_RISK_FACTORS.put("South Korea", new RiskFactors(-0.3, 0.8, 0.0, -0.2, 0.6));
         
-        // Medium stability
+        // medium stability
         COUNTRY_RISK_FACTORS.put("Italy", new RiskFactors(0.2, 0.1, 0.5, 0.0, 0.2));
         COUNTRY_RISK_FACTORS.put("Spain", new RiskFactors(-0.2, 0.1, 0.3, 0.0, 0.2));
         COUNTRY_RISK_FACTORS.put("Portugal", new RiskFactors(-0.5, 0.0, 0.0, -0.2, 0.1));
@@ -89,11 +89,11 @@ public class CountryDataService {
         COUNTRY_RISK_FACTORS.put("Uruguay", new RiskFactors(-0.2, 0.1, 0.3, 0.2, 0.1));
         COUNTRY_RISK_FACTORS.put("Costa Rica", new RiskFactors(0.0, 0.2, 0.4, 0.1, 0.2));
         
-        // Fixed: India and Ireland (these were causing errors)
+        // fixed: India and Ireland
         COUNTRY_RISK_FACTORS.put("India", new RiskFactors(0.3, 1.2, 0.2, 0.8, 1.0)); // Border tensions, internal conflicts
         COUNTRY_RISK_FACTORS.put("Ireland", new RiskFactors(-1.5, 0.1, -0.5, -1.0, 0.2));
         
-        // Medium-high risk
+        // medium-high risk
         COUNTRY_RISK_FACTORS.put("Poland", new RiskFactors(0.3, 0.2, 0.4, 0.5, 0.4));
         COUNTRY_RISK_FACTORS.put("Slovakia", new RiskFactors(0.2, 0.0, 0.3, 0.4, 0.3));
         COUNTRY_RISK_FACTORS.put("Hungary", new RiskFactors(0.8, 0.1, 0.5, 0.8, 0.3));
@@ -106,13 +106,13 @@ public class CountryDataService {
         COUNTRY_RISK_FACTORS.put("Thailand", new RiskFactors(1.0, 0.6, 0.4, 1.1, 0.5));
         COUNTRY_RISK_FACTORS.put("Philippines", new RiskFactors(1.2, 1.8, 0.8, 1.8, 1.2));
         
-        // Fixed: Central American countries (were showing unrealistically low risk)
+        // FIXED: Central American countries (were showing unrealistically low risk)
         COUNTRY_RISK_FACTORS.put("Honduras", new RiskFactors(1.8, 2.5, 1.5, 2.0, 1.8)); // High crime, instability
         COUNTRY_RISK_FACTORS.put("Nicaragua", new RiskFactors(2.2, 1.2, 1.8, 2.5, 2.0)); // Authoritarian drift
         COUNTRY_RISK_FACTORS.put("El Salvador", new RiskFactors(1.5, 2.0, 1.2, 1.8, 1.5)); // Gang violence, authoritarianism
         COUNTRY_RISK_FACTORS.put("Guatemala", new RiskFactors(1.8, 1.8, 1.4, 2.2, 1.6));
         
-        // High risk countries
+        // high risk countries
         COUNTRY_RISK_FACTORS.put("China", new RiskFactors(1.5, 0.8, 0.5, 2.0, 1.2));
         COUNTRY_RISK_FACTORS.put("Russia", new RiskFactors(2.8, 3.5, 1.5, 3.5, 3.8)); // Active war, sanctions
         COUNTRY_RISK_FACTORS.put("Iran", new RiskFactors(2.5, 2.0, 2.0, 4.0, 3.0));
@@ -121,10 +121,10 @@ public class CountryDataService {
         COUNTRY_RISK_FACTORS.put("Belarus", new RiskFactors(2.8, 1.0, 2.0, 3.8, 2.2));
         COUNTRY_RISK_FACTORS.put("Myanmar", new RiskFactors(3.5, 4.0, 2.5, 4.5, 4.2));
         
-        // Fixed: Ukraine should have much higher risk due to active war
+        // FIXED: Ukraine should have much higher risk due to active war
         COUNTRY_RISK_FACTORS.put("Ukraine", new RiskFactors(2.0, 4.0, 3.0, 2.5, 4.0)); // Active war zone
         
-        // Critical risk countries
+        // critical risk countries
         COUNTRY_RISK_FACTORS.put("Afghanistan", new RiskFactors(3.5, 4.0, 3.8, 5.2, 4.5));
         COUNTRY_RISK_FACTORS.put("Iraq", new RiskFactors(2.8, 3.5, 2.5, 4.8, 3.2));
         COUNTRY_RISK_FACTORS.put("Syria", new RiskFactors(3.0, 4.5, 4.0, 5.5, 4.8));
@@ -139,7 +139,7 @@ public class CountryDataService {
         COUNTRY_RISK_FACTORS.put("Sudan", new RiskFactors(3.0, 3.8, 3.5, 4.8, 3.8));
         COUNTRY_RISK_FACTORS.put("Nigeria", new RiskFactors(1.8, 2.5, 1.5, 3.2, 2.2));
         
-        // Fixed: Pakistan should have higher risk score
+        // FIXED: Pakistan should have higher risk score
         COUNTRY_RISK_FACTORS.put("Pakistan", new RiskFactors(2.2, 3.0, 2.0, 3.8, 3.2)); // Terrorism, political instability
         COUNTRY_RISK_FACTORS.put("Bangladesh", new RiskFactors(1.5, 1.0, 1.2, 2.8, 1.8));
         COUNTRY_RISK_FACTORS.put("Turkey", new RiskFactors(1.8, 1.5, 1.5, 2.8, 2.0));
@@ -196,7 +196,7 @@ public class CountryDataService {
                 throw new CountryNotFoundException("Invalid country data received for '" + countryName + "'");
             }
             
-            // Extract proper country name
+            // extract proper country name
             String properCountryName = countryName;
             if (country.has("name") && country.get("name").has("common")) {
                 properCountryName = country.get("name").get("common").asText();
@@ -204,34 +204,34 @@ public class CountryDataService {
             
             CountryInfo info = new CountryInfo(properCountryName);
             
-            // Capital - handle multiple capitals or empty array
+            // capital - handle multiple capitals or empty array
             if (country.has("capital") && country.get("capital").isArray() && country.get("capital").size() > 0) {
                 info.setCapital(country.get("capital").get(0).asText());
             } else {
                 info.setCapital("N/A");
             }
             
-            // Population
+            // population
             if (country.has("population")) {
                 info.setPopulation(country.get("population").asLong());
             }
             
-            // Region - this should be accurate from the API
+            // region - from the API
             if (country.has("region")) {
                 info.setRegion(country.get("region").asText());
             }
             
-            // Subregion
+            // subregion
             if (country.has("subregion")) {
                 info.setSubregion(country.get("subregion").asText());
             }
             
-            // Area
+            // area
             if (country.has("area") && !country.get("area").isNull()) {
                 info.setArea(country.get("area").asDouble());
             }
             
-            // Currency - get the first currency
+            // currency - get the first currency
             if (country.has("currencies") && country.get("currencies").isObject()) {
                 JsonNode currencies = country.get("currencies");
                 if (currencies.size() > 0) {
@@ -245,7 +245,7 @@ public class CountryDataService {
                 }
             }
             
-            // Language - get the first official language
+            // language - get the first official language
             if (country.has("languages") && country.get("languages").isObject()) {
                 JsonNode languages = country.get("languages");
                 if (languages.size() > 0) {
@@ -254,17 +254,17 @@ public class CountryDataService {
                 }
             }
             
-            // Flag emoji - this should be in the API response
+            // flag emoji - should be in the API response
             if (country.has("flag")) {
                 info.setFlagEmoji(country.get("flag").asText());
             } else {
                 info.setFlagEmoji(generateFlagEmoji(properCountryName));
             }
             
-            // Generate realistic GDP per capita
+            // realistic GDP per capita
             info.setGdpPerCapita(generateRealisticGdp(properCountryName, info.getRegion()));
             
-            // Fixed: Calculate proper geopolitical risk using dynamic algorithm
+            // FIXED: Calculate proper geopolitical risk using dynamic algorithm
             info.setGeopoliticalRiskIndex(calculateGeopoliticalRisk(properCountryName, info.getRegion()));
             
             return info;
@@ -279,7 +279,7 @@ public class CountryDataService {
     }
     
     private String generateFlagEmoji(String countryName) {
-        // Map of country names to flag emojis
+        // map of country names to flag emojis
         Map<String, String> flagMap = new HashMap<>();
         flagMap.put("Germany", "🇩🇪");
         flagMap.put("Japan", "🇯🇵");
@@ -374,7 +374,7 @@ public class CountryDataService {
     }
     
     private Double generateRealisticGdp(String countryName, String region) {
-        // Base GDP by region (realistic averages)
+        // base GDP by region (realistic averages)
         Map<String, Double> regionGdp = new HashMap<>();
         regionGdp.put("Europe", 35000.0);
         regionGdp.put("North America", 45000.0);
@@ -385,9 +385,9 @@ public class CountryDataService {
         
         double baseGdp = regionGdp.getOrDefault(region, 15000.0);
         
-        // Country-specific adjustments based on economic development
+        // country-specific adjustments based on economic development
         Map<String, Double> countryGdpMultiplier = new HashMap<>();
-        // High-income countries
+        // high-income countries
         countryGdpMultiplier.put("Luxembourg", 3.5);
         countryGdpMultiplier.put("Switzerland", 2.5);
         countryGdpMultiplier.put("Norway", 2.3);
@@ -409,7 +409,7 @@ public class CountryDataService {
         countryGdpMultiplier.put("Spain", 0.8);
         countryGdpMultiplier.put("Ireland", 2.0);
         
-        // Upper middle income
+        // upper middle income
         countryGdpMultiplier.put("Russia", 0.3);
         countryGdpMultiplier.put("China", 0.4);
         countryGdpMultiplier.put("Brazil", 0.3);
@@ -418,7 +418,7 @@ public class CountryDataService {
         countryGdpMultiplier.put("Turkey", 0.3);
         countryGdpMultiplier.put("Thailand", 0.2);
         
-        // Lower middle income
+        // lower middle income
         countryGdpMultiplier.put("India", 0.07);
         countryGdpMultiplier.put("Indonesia", 0.12);
         countryGdpMultiplier.put("Philippines", 0.1);
@@ -434,7 +434,7 @@ public class CountryDataService {
         countryGdpMultiplier.put("El Salvador", 0.12);
         countryGdpMultiplier.put("Guatemala", 0.1);
         
-        // Low income
+        // low income
         countryGdpMultiplier.put("Afghanistan", 0.02);
         countryGdpMultiplier.put("Ethiopia", 0.03);
         countryGdpMultiplier.put("Somalia", 0.015);
@@ -443,37 +443,37 @@ public class CountryDataService {
         countryGdpMultiplier.put("South Sudan", 0.01);
         
         double multiplier = countryGdpMultiplier.getOrDefault(countryName, 0.5);
-        // Convert Math.round result (long) to Double
+        // convert Math.round result (long) to Double
         return (double) Math.round(baseGdp * multiplier);
     }
     
-    // Fixed: Dynamic geopolitical risk calculation instead of hard-coded values
+    // FIXED: Dynamic geopolitical risk calculation instead of hard-coded values
     private Double calculateGeopoliticalRisk(String countryName, String region) {
-        // Start with regional base risk
+        // start with regional base risk
         double risk = REGIONAL_BASE_RISK.getOrDefault(region, 3.0);
         
-        // Get country-specific risk factors
+        // get country-specific risk factors
         RiskFactors factors = COUNTRY_RISK_FACTORS.get(countryName);
         
         if (factors != null) {
-            // Apply weighted risk calculation
+            // apply weighted risk calculation
             risk += factors.politicalStability * 0.25;      // 25% weight for political stability
             risk += factors.conflictLevel * 0.30;           // 30% weight for conflict/violence
             risk += factors.economicStability * 0.15;       // 15% weight for economic factors
             risk += factors.institutionalStrength * 0.20;   // 20% weight for institutions
             risk += factors.currentEvents * 0.10;           // 10% weight for current events
         } else {
-            // Default calculation for countries not in our database
+            // Default calculation for countries not in  database
             // Use regional averages with slight random variation based on country name
             int nameHash = Math.abs(countryName.hashCode()) % 100;
             double variation = (nameHash - 50) / 100.0; // -0.5 to +0.5 variation
             risk += variation;
         }
         
-        // Ensure risk is within bounds (0-10 scale)
-        risk = Math.max(0.1, Math.min(10.0, risk)); // Minimum 0.1 to avoid showing 0.0
+        // ensure risk is within bounds (0-10 scale)
+        risk = Math.max(0.1, Math.min(10.0, risk)); // minimum 0.1 to avoid showing 0.0
         
-        // Round to 1 decimal place
+        // round to 1 decimal place
         return Math.round(risk * 10.0) / 10.0;
     }
 }

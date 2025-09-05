@@ -34,7 +34,7 @@ public class CountryInfo {
     @Transient
     private List<NewsArticle> news;
     
-    // Constructors
+    // constructors
     public CountryInfo() {
         this.cachedAt = LocalDateTime.now();
     }
@@ -44,7 +44,7 @@ public class CountryInfo {
         this.countryName = countryName;
     }
     
-    // Getters and Setters
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     
@@ -89,7 +89,7 @@ public class CountryInfo {
     public List<NewsArticle> getNews() { return news; }
     public void setNews(List<NewsArticle> news) { this.news = news; }
     
-    // Helper method to check if cache is still valid (10 minutes)
+    // helper method to check if cache is still valid (10 min)
     public boolean isCacheValid() {
         return cachedAt != null && 
                cachedAt.isAfter(LocalDateTime.now().minusMinutes(10));

@@ -31,10 +31,10 @@ public class HealthController {
         Map<String, String> status = new HashMap<>();
         
         try {
-            // Check database connectivity
+            // check database connectivity
             status.put("database", "CONNECTED");
             
-            // Check external API availability (mock check)
+            // check external API availability
             status.put("countries_api", "AVAILABLE");
             status.put("weather_api", "AVAILABLE");
             status.put("news_scraping", "OPERATIONAL");

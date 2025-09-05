@@ -2,9 +2,9 @@
 
 Ever get curious about what's happening somewhere in the world right now? Like, what's the latest news in Thailand, or how's the political situation in Chile? 
 
-I built GeoPulse because I'm a bit of a news junkie and geography nerd. Just type any country name you get the full picture: population stats, breaking news from local sources, and even how stable things are politically.
+I built GeoPulse because I'm a bit of a news junkie and geopolitics nerd. Just type any country name you get the full picture: population stats, breaking news from local sources, and even how stable things are politically.
 
-## what makes this thing cool?
+## what makes this cool?
 
 - **actually fresh data** - pulls live news from local RSS feeds, not just generic international coverage
 - **one search, everything** - population, GDP, news, risk levels all in one place  
@@ -13,17 +13,17 @@ I built GeoPulse because I'm a bit of a news junkie and geography nerd. Just typ
 
 ## what you'll need
 
-- **Java 17+** (or whatever newer version you have)
+- **Java 17+**
 - **Node.js 18+** 
-- **Maven** (for the Java stuff)
+- **Maven**
 - Internet connection (obviously)
 
 ## getting it running
 
 ### clone and enter
 ```bash
-git clone <your-repo-url>
-cd geopolitics-app
+git clone <https://github.com/RohanShukla23/geopulse>
+cd geopulse
 ```
 
 ### fire up the backend
@@ -42,7 +42,7 @@ npm start
 Frontend opens at `http://localhost:3000`
 
 ### test drive
-Try searching for some countries to see if everything's working:
+try searching for some countries to see if everything's working:
 - **Germany** → should show Berlin, German headlines, ~83M people
 - **Japan** → Tokyo, Japanese news, demographic stuff
 - **Brazil** → Brasília, Portuguese sources, 215M+ population  

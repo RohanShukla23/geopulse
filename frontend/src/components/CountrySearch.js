@@ -9,7 +9,7 @@ const CountrySearch = ({ onSearch, disabled = false }) => {
   const inputRef = useRef(null);
   const suggestionsRef = useRef(null);
 
-  // Debounced suggestions fetching
+  // debounced suggestions fetching
   useEffect(() => {
     const timeoutId = setTimeout(async () => {
       if (searchTerm.length >= 2) {
@@ -39,9 +39,9 @@ const CountrySearch = ({ onSearch, disabled = false }) => {
     e.preventDefault();
     const trimmedTerm = searchTerm.trim();
     
-    // Input validation
+    // input validation
     if (!trimmedTerm) {
-      return; // Don't submit empty searches
+      return; // don't submit empty searches
     }
     
     if (trimmedTerm.length < 2) {
@@ -49,7 +49,7 @@ const CountrySearch = ({ onSearch, disabled = false }) => {
       return;
     }
     
-    // Check for invalid characters
+    // check for invalid characters
     if (/[0-9!@#$%^&*()_+={}[\]:;"'<>,.?/|\\]/.test(trimmedTerm)) {
       alert('Please enter a valid country name (letters only)');
       return;
@@ -102,7 +102,7 @@ const CountrySearch = ({ onSearch, disabled = false }) => {
   };
 
   const onBlur = (e) => {
-    // Delay hiding suggestions to allow click events
+    // delay hiding suggestions to allow click events
     setTimeout(() => {
       if (!suggestionsRef.current?.contains(document.activeElement)) {
         setShowSuggestions(false);

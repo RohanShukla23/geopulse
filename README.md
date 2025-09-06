@@ -18,6 +18,33 @@ I built GeoPulse because I'm a bit of a news junkie and geopolitics nerd. Just t
 - **Maven**
 - Internet connection (obviously)
 
+### installing Maven & npm
+
+Before running the backend and frontend, make sure you have **Maven** and **npm** installed:
+
+#### **Install Maven**
+1. Go to the [Maven download page](https://maven.apache.org/download.cgi).
+2. Download the latest **binary zip** for your OS.
+3. Extract it somewhere on your computer.
+4. Add the `bin` folder from the extracted Maven directory to your **PATH** environment variable.
+5. Verify the installation:
+    ```bash
+    mvn -v
+    ```
+    If successful, you'll see the Maven version and Java version.
+
+#### **Install npm**
+1. Go to the [Node.js download page](https://nodejs.org/).
+2. Download and install **Node.js** (npm comes bundled with it).
+3. Verify installation:
+    ```bash
+    npm -v
+    node -v
+    ```
+    If both return version numbers, you're good to go.
+
+---
+
 ## getting it running
 
 ### clone and enter

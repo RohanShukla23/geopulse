@@ -89,7 +89,7 @@ frontend/
 │   └── App.js              # main app
 └── package.json
 
-# usual suspects
+# usual clerical stuff
 ├── .gitignore
 ├── LICENSE  
 └── README.md (you're here!)

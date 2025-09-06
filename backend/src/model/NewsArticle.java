@@ -40,7 +40,7 @@ public class NewsArticle {
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
     
-    // helper method to get display-friendly published time
+    // get display-friendly published time
     public String getTimeAgo() {
         if (publishedAt == null) return "Unknown";
         
@@ -56,7 +56,7 @@ public class NewsArticle {
         }
     }
     
-    // helper method to truncate long titles
+    // truncate long titles
     public String getTruncatedTitle(int maxLength) {
         if (title == null) return "";
         return title.length() > maxLength ? 

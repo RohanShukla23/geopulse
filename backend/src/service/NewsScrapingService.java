@@ -24,7 +24,7 @@ public class NewsScrapingService {
     }
     
     private void initializeRssFeeds() {
-        // map countries to their RSS feeds (using BBC country pages as fallback)
+        // map countries to their RSS feeds (use BBC country pages as fallback)
         countryRssFeeds.put("germany", new String[]{"https://feeds.bbci.co.uk/news/world/europe/rss.xml"});
         countryRssFeeds.put("japan", new String[]{"https://feeds.bbci.co.uk/news/world/asia/rss.xml"});
         countryRssFeeds.put("brazil", new String[]{"https://feeds.bbci.co.uk/news/world/latin_america/rss.xml"});
@@ -60,7 +60,7 @@ public class NewsScrapingService {
             }
         }
         
-        // if no articles found from RSS, generate mock articles
+        // no articles found from RSS
         if (allArticles.isEmpty()) {
             allArticles = generateMockNews(countryName);
         }

@@ -18,8 +18,6 @@ I built GeoPulse because I'm a bit of a news junkie and geopolitics nerd. Just t
 - **Maven**
 - Internet connection (obviously)
 
-### installing Maven & npm
-
 Before running the backend and frontend, make sure you have **Maven** and **npm** installed:
 
 #### **Install Maven**
@@ -42,8 +40,6 @@ Before running the backend and frontend, make sure you have **Maven** and **npm*
     node -v
     ```
     If both return version numbers, you're good to go.
-
----
 
 ## getting it running
 

@@ -22,7 +22,7 @@ I built GeoPulse because I'm a bit of a news junkie and geopolitics nerd. Just t
 
 ### clone and enter
 ```bash
-git clone <https://github.com/RohanShukla23/geopulse>
+git clone https://github.com/RohanShukla23/geopulse
 cd geopulse
 ```
 

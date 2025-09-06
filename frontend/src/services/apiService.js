@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Base API configuration
+// base API config
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
 
 const apiClient = axios.create({
@@ -11,7 +11,7 @@ const apiClient = axios.create({
   },
 });
 
-// Request interceptor for logging
+// request interceptor for logging
 apiClient.interceptors.request.use(
   (config) => {
     console.log(`Making API request to: ${config.url}`);
@@ -23,10 +23,10 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Response interceptor for error handling
+// response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => {
-    // Check if the response contains error data (HTTP 200 but with error info)
+    // check if response contains error data
     if (response.data && response.data.region && response.data.region.includes('not found')) {
       throw new Error(response.data.region);
     }
@@ -43,11 +43,11 @@ apiClient.interceptors.response.use(
     }
     
     if (error.response) {
-      // Server responded with error status
+      // server responded with error status
       const status = error.response.status;
       const data = error.response.data;
       
-      // Check for error in response data
+      // check for error in response data
       if (data && data.region) {
         throw new Error(data.region);
       }
@@ -67,7 +67,7 @@ apiClient.interceptors.response.use(
           throw new Error(`Error ${status}: ${message}`);
       }
     } else if (error.request) {
-      // Network error
+      // network error
       throw new Error('Network error - please check your connection');
     } else {
       throw new Error('Unexpected error occurred');
@@ -76,9 +76,9 @@ apiClient.interceptors.response.use(
 );
 
 /**
- * Search for country information
- * @param {string} countryName - Name of the country to search for
- * @returns {Promise<Object>} Country data including demographics, weather, and news
+ * search for country information
+ * @param {string} countryName - name of the country to search for
+ * @returns {Promise<Object>} country data including demographics, weather, and news
  */
 export const searchCountry = async (countryName) => {
   try {
@@ -91,9 +91,9 @@ export const searchCountry = async (countryName) => {
 };
 
 /**
- * Get country suggestions for autocomplete
- * @param {string} query - Search query for country suggestions
- * @returns {Promise<Array>} Array of country name suggestions
+ * get country suggestions for autocomplete
+ * @param {string} query - search query for country suggestions
+ * @returns {Promise<Array>} array of country name suggestions
  */
 export const getCountrySuggestions = async (query) => {
   if (!query || query.length < 2) {
@@ -110,8 +110,8 @@ export const getCountrySuggestions = async (query) => {
 };
 
 /**
- * Check API health status
- * @returns {Promise<Object>} Health status information
+ * check API health status
+ * @returns {Promise<Object>} health status information
  */
 export const checkHealthStatus = async () => {
   try {
@@ -124,8 +124,8 @@ export const checkHealthStatus = async () => {
 };
 
 /**
- * Get detailed service status
- * @returns {Promise<Object>} Detailed status of all services
+ * get detailed service status
+ * @returns {Promise<Object>} detailed status of all services
  */
 export const getServiceStatus = async () => {
   try {
